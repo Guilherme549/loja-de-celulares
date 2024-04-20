@@ -1,8 +1,8 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { BsCartDashFill } from "react-icons/bs";
 import { getItem, removeItemFromCart } from '../services/LocalStorageFuncs';
-import styled from 'styled-components';
 import { Link } from 'react-router-dom';
+import styled from 'styled-components';
 
 const PageContainer = styled.div`
     min-height: 100vh;
@@ -22,13 +22,15 @@ const StickyHeader = styled.header`
     padding: 10px 20px;
     box-shadow: 0 2px 5px rgba(0,0,0,0.1);
     z-index: 1000;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
 `;
 
 const Header = styled.h1`
     color: #1a237e;
     font-size: 2em;
-    text-align: center;
-    margin: 10px 0;
+    margin: 0;
 `;
 
 const ProductsArea = styled.div`
@@ -100,11 +102,11 @@ const Footer = styled.footer`
 
 const StyledLink = styled(Link)`
     padding: 10px 15px;
-    margin: 10px;
     background-color: #1a237e;
     color: white;
     text-decoration: none;
     border-radius: 8px;
+    font-weight: bold;
 `;
 
 export const Cart = () => {
@@ -116,11 +118,15 @@ export const Cart = () => {
         removeItemFromCart('carrinhoYT', arrFilter);
     }
 
+    useEffect(() => {
+        // Assuming some fetch logic here if needed.
+    }, []);
+
     return (
         <PageContainer>
             <StickyHeader>
                 <Header>Carrinho</Header>
-                <StyledLink>loja</StyledLink>
+                <StyledLink to='/'>Voltar à Loja</StyledLink>
             </StickyHeader>
             <ProductsArea>
                 {data.map((e) => (
