@@ -63,24 +63,23 @@ const ProductCard = styled.div`
 const AddToCartButton = styled.button`
     padding: 10px 20px;
     font-size: 16px;
-    color: white; // Assegura que o texto seja visível contra o fundo colorido
-    background-color: #FF6347; // Usando um vermelho-tomate para maior contraste
+    color: white;
+    background-color: ${props => props.inCart ? "#FF1744" : "#00C853"}; // Red for remove, green for add
     border: none;
     border-radius: 8px;
     cursor: pointer;
     transition: background-color 0.3s, transform 0.3s;
 
     &:hover, &:focus {
-        background-color: #FF4500; // Um laranja mais escuro para o hover e focus
+        background-color: ${props => props.inCart ? "#F01440" : "#00E676"}; // Darker shade on hover
         transform: scale(1.05); // Aumenta ligeiramente o tamanho ao interagir
     }
 
     &:active {
         transform: scale(0.95); // Efeito de pressionar o botão
-        background-color: #CD3700; // Cor mais escura ao pressionar
+        background-color: ${props => props.inCart ? "#D01130" : "#009845"}; // Even darker on click
     }
 `;
-
 
 const Store = () => {
     const [data, setData] = useState([]);
@@ -95,14 +94,14 @@ const Store = () => {
             const response = await fetch(url);
             // convertendo url pra json
             const objJson = await response.json();
-            // pegando a variavel json, lendo os resultados e armazando no useState data e pegando os datos da api com "results" que sao os produtos (celulares)
+            // pegando a variavel json, lendo os resultados e armazenando no useState data e pegando os dados da api com "results" que sao os produtos (celulares)
             setData(objJson.results);
         };
         // chamando a funcao
         fetchApi();
     }, []);
 
-    // logica : Verifica se um item já está no carrinho: Se estiver, o item é removido.Se o item não está no carrinho, ele é adicionado.
+    // logica: Verifica se um item já está no carrinho: Se estiver, o item é removido. Se o item não está no carrinho, ele é adicionado.
     const handleClick = (obj) => {
         // Procurando o produto e verificando se ele ja nao esta no carrinho "cart".
         const element = cart.find((e) => e.id === obj.id);
@@ -116,7 +115,7 @@ const Store = () => {
             // remove o item se do localStorage
             removeItemFromCart('carrinhoYT', arrfilter);
         } else {
-            // junta todos os produtos do carrinho com o obj novo que a funcao  Após todos os elementos de cart terem sido incluídos na nova array, o obj (o novo item a ser adicionado ao carrinho) é colocado na array.
+            // junta todos os produtos do carrinho com o obj novo que a funcao. Após todos os elementos de cart terem sido incluídos na nova array, o obj (o novo item a ser adicionado ao carrinho) é colocado na array.
             const newCart = [...cart, obj];
             setCart(newCart);
             // adicione os dados nesta funcao permante
@@ -126,7 +125,7 @@ const Store = () => {
 
     return (
         <PageContainer>
-            <StyledLink to='/cart'>Carrinho</StyledLink>
+            <StyledLink to='/cart'>Ver Carrinho</StyledLink>
             <Heading>Store</Heading>
             <ProductContainer>
                 {data.map((e) => (
@@ -134,8 +133,8 @@ const Store = () => {
                         <h4>{e.title}</h4>
                         <img src={e.thumbnail} alt={e.title} />
                         <h4>{`R$ ${e.price}`}</h4>
-                        <AddToCartButton onClick={() => handleClick(e)}>
-                            {cart.some((itemCart) => itemCart.id === e.id) ? <BsCartCheckFill /> : <BsCartPlusFill />}
+                        <AddToCartButton onClick={() => handleClick(e)} inCart={cart.some(item => item.id === e.id)}>
+                            {cart.some(item => item.id === e.id) ? <BsCartCheckFill /> : <BsCartPlusFill />}
                         </AddToCartButton>
                     </ProductCard>
                 ))}

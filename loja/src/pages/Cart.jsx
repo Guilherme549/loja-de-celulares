@@ -109,6 +109,13 @@ const StyledLink = styled(Link)`
     font-weight: bold;
 `;
 
+const TotalDisplay = styled.h2`
+    font-size: 1.5em;
+    color: #ff1744;  // Cor destacada para o total
+    font-weight: bold;
+    margin: 0 20px;  // Ajuste conforme necessário para alinhamento
+`;
+
 export const Cart = () => {
     const [data, setData] = useState(getItem('carrinhoYT') || [])
 
@@ -117,14 +124,11 @@ export const Cart = () => {
         setData(arrFilter);
         removeItemFromCart('carrinhoYT', arrFilter);
     }
-
-    useEffect(() => {
-        // Assuming some fetch logic here if needed.
-    }, []);
-
+    const subTotal = data.reduce((acc,cur) => acc + cur.price ,0)
     return (
         <PageContainer>
             <StickyHeader>
+                <TotalDisplay>{`Valor total do carrinho: R$ ${subTotal.toFixed(2)}`}</TotalDisplay>
                 <Header>Carrinho</Header>
                 <StyledLink to='/'>Voltar à Loja</StyledLink>
             </StickyHeader>
@@ -140,6 +144,7 @@ export const Cart = () => {
                     </ProductCard>
                 ))}
             </ProductsArea>
+
             <Footer>
                 &copy; {new Date().getFullYear()} Your Mobile Store. All rights reserved.
             </Footer>
